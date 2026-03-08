@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Garden of Ridleys 🌸</title>
+    <title>Garden of Ridleys 🏵️</title>
     <style>
         body {
             margin: 0;
@@ -12,7 +12,7 @@
             justify-content: center;
             align-items: center;
             background: linear-gradient(#ffd89b, #f6b46c);
-            font-family: 'Georgia', serif; /* More artistic font */
+            font-family: 'Courier New', Courier, monospace;
             overflow: hidden;
             transition: background 2s ease;
         }
@@ -22,18 +22,17 @@
         .sun { 
             position: absolute; width: 180px; height: 180px; background: #fff176; 
             border-radius: 50%; bottom: -200px; left: 50%; transform: translateX(-50%); 
-            box-shadow: 0 0 100px #fbc02d; transition: bottom 4s ease-in-out; z-index: 2; 
+            box-shadow: 0 0 100px #fbc02d; transition: bottom 4.5s cubic-bezier(0.18, 0.89, 0.32, 1.28); z-index: 2; 
         }
 
         .garden-box {
-            background: rgba(255, 243, 214, 0.9);
-            border: 4px solid #8f6a3c;
+            background: #fff3d6;
+            border: 6px solid #8f6a3c;
             padding: 30px;
             text-align: center;
-            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+            box-shadow: 0 10px 0px #8f6a3c;
             z-index: 100;
             position: relative;
-            border-radius: 2px;
         }
 
         /* --- THE PAINTED MEADOW --- */
@@ -43,55 +42,56 @@
             width: 100%;
             height: 35vh;
             z-index: 10;
-            /* Creates the "painted" ground effect */
-            background: linear-gradient(to top, #4b6329, #8d9c3e, transparent);
-            filter: blur(8px); /* Softens the ground like brushstrokes */
+            background: linear-gradient(to top, #2e7d32, #66bb6a, transparent);
+            filter: blur(18px); /* Smudges the green like oil paint */
+            opacity: 0.85;
         }
 
         .flower-container {
             position: absolute;
-            bottom: 20px;
+            bottom: 5px; /* Tucked deep into the meadow */
             width: 100%;
             height: 300px;
             display: flex;
-            justify-content: space-around;
+            justify-content: center;
             align-items: flex-end;
             padding: 0 20px;
             box-sizing: border-box;
-            z-index: 15;
+            z-index: 20;
         }
 
         .flower {
             font-size: 80px;
             display: inline-block;
             transform: scale(0);
-            transition: transform 2s cubic-bezier(0.1, 0.5, 0.1, 1);
-            /* THE PAINT EFFECT: Blurs slightly then adds contrast to look like paint clumps */
-            filter: blur(1px) contrast(1.5) drop-shadow(5px 5px 2px rgba(0,0,0,0.2));
+            transition: transform 1.5s cubic-bezier(0.1, 0.5, 0.1, 1);
+            filter: contrast(1.3) drop-shadow(3px 3px 0px rgba(0,0,0,0.1));
+            margin: 0 -10px; /* Overlap them to look "planted" together */
+            user-select: none;
         }
 
-        .flower.bloom { transform: scale(1) translateY(0); animation: sway 8s infinite alternate ease-in-out; }
+        .flower.bloom { transform: scale(1); animation: sway 6s infinite alternate ease-in-out; }
 
-        /* Randomizes height slightly for a wild look */
-        .flower:nth-child(even) { margin-bottom: 20px; font-size: 95px; }
-        .flower:nth-child(3n) { margin-bottom: -10px; font-size: 70px; }
+        /* Varies heights for a wild look */
+        .flower:nth-child(even) { margin-bottom: 25px; font-size: 90px; }
+        .flower:nth-child(3n) { margin-bottom: -5px; font-size: 70px; }
 
         @keyframes sway { 
-            from { transform: rotate(-3deg) translateX(-5px); } 
-            to { transform: rotate(3deg) translateX(5px); } 
+            from { transform: rotate(-4deg) translateY(0); } 
+            to { transform: rotate(4deg) translateY(-8px); } 
         }
 
         /* Weather */
-        .drop { position: absolute; width: 2px; height: 15px; background: #aebce0; animation: fall 1s linear infinite; opacity: 0.6; }
+        .drop { position: absolute; width: 3px; height: 15px; background: #aebce0; animation: fall 0.8s linear infinite; opacity: 0.6; }
         @keyframes fall { to { transform: translateY(100vh); } }
-        .heart { position: absolute; font-size: 25px; animation: float 5s linear forwards; filter: blur(1px); }
-        @keyframes float { 0% { transform: translateY(100vh); opacity: 0.8; } 100% { transform: translateY(-10vh); opacity: 0; } }
+        .heart { position: absolute; font-size: 25px; animation: float 5s linear forwards; }
+        @keyframes float { 0% { transform: translateY(100vh); opacity: 1; } 100% { transform: translateY(-10vh); opacity: 0; } }
 
         /* UI */
-        h1 { color: #5d4037; font-style: italic; margin-top: 0; }
-        input { padding: 12px; border: 2px solid #8f6a3c; font-size: 16px; background: transparent; width: 180px; outline: none; }
-        button { padding: 12px 30px; background: #5d4037; border: none; color: white; cursor: pointer; font-size: 16px; margin-top: 10px; transition: 0.3s; }
-        button:hover { background: #8f6a3c; }
+        h1 { color: #5d4037; font-weight: bold; margin-top: 0; }
+        input { padding: 12px; border: 4px solid #8f6a3c; font-size: 16px; width: 220px; outline: none; margin-bottom: 10px; }
+        button { padding: 12px 30px; background: #7cc576; border: none; color: white; cursor: pointer; font-size: 18px; font-weight: bold; border-bottom: 4px solid #4a8d45; }
+        button:active { transform: translateY(4px); border-bottom: 0; }
     </style>
 </head>
 <body>
@@ -101,25 +101,18 @@
 
     <div class="garden-box">
         <h1>Garden of Ridleys 🌸</h1>
-        <p style="color: #8d6e63;">Type: love, sunrise, or rain</p>
-        <input type="text" id="mood" placeholder="..."><br>
-        <button onclick="playMusic()">Play</button>
+        <p style="color: #8d6e63;">Enter: love, sunrise, or rain</p>
+        <input type="text" id="mood" placeholder="...">
+        <br>
+        <button onclick="playMusic()">Bloom</button>
         <br><br>
         <audio id="player" controls></audio>
     </div>
 
-    <!-- Background Meadow -->
     <div class="meadow"></div>
 
-    <!-- Flowers Layer -->
-    <div class="flower-container">
-        <div class="flower"></div>
-        <div class="flower"></div>
-        <div class="flower"></div>
-        <div class="flower"></div>
-        <div class="flower"></div>
-        <div class="flower"></div>
-        <div class="flower"></div>
+    <div class="flower-container" id="flower-bed">
+        <!-- JS will populate these -->
     </div>
 
     <script>
@@ -130,13 +123,14 @@
             const player = document.getElementById("player");
             const container = document.getElementById("effects-container");
             const sun = document.getElementById("sun");
-            const flowers = document.querySelectorAll(".flower");
+            const flowerBed = document.getElementById("flower-bed");
 
+            // Cleanup
             container.innerHTML = "";
+            flowerBed.innerHTML = ""; 
             sun.style.bottom = "-200px";
             if (heartInterval) clearInterval(heartInterval);
             document.body.style.background = "linear-gradient(#ffd89b, #f6b46c)";
-            flowers.forEach(f => f.classList.remove("bloom"));
 
             const songs = {
                 love: "music/germany.mp3",
@@ -149,39 +143,45 @@
                 player.play();
 
                 if (mood === "rain") {
-                    document.body.style.background = "linear-gradient(#37474f, #1a237e)";
-                    setFlowers(["🪻", "🪷", "🪻", "🪷", "🪻", "🪷", "🪻"]);
-                    for(let i=0; i<60; i++) {
+                    document.body.style.background = "linear-gradient(#2c3e50, #000000)";
+                    // Purple Hyacinth and Lily
+                    plant(["🪻", "🪷", "🪻", "🪷", "🪻", "🪷", "🪻", "🪷"]);
+                    for(let i=0; i<80; i++) {
                         let d = document.createElement("div"); d.className = "drop";
                         d.style.left = Math.random() * 100 + "vw"; d.style.animationDelay = Math.random() + "s";
                         container.appendChild(d);
                     }
                 } 
                 else if (mood === "sunrise") {
-                    document.body.style.background = "linear-gradient(#ffab91, #ffd54f, #fff176)";
-                    sun.style.bottom = "10%";
-                    // These match the white/yellow flowers in your painting
-                    setFlowers(["🌼", "💮", "🌼", "💮", "🌼", "💮", "🌼"]);
+                    document.body.style.background = "linear-gradient(#ff7e5f, #feb47b, #ffcc33)";
+                    sun.style.bottom = "12%";
+                    // Sunflowers, Daffodils, and Yellow Tulips
+                    plant(["🌻", "🌼", "🌷", "🌻", "🌼", "🌷", "🌻", "🌼"]);
                 }
                 else if (mood === "love") {
                     document.body.style.background = "linear-gradient(#f48fb1, #fce4ec)";
-                    setFlowers(["🌹", "🌸", "🌹", "🌸", "🌹", "🌸", "🌹"]);
+                    // Tulips, Orchids, Lily, Carnation, Rose, Daisy, Peonies, Sunflowers, Chrysanthemums
+                    plant(["🌷", "🪻", "🪷", "🌸", "🌹", "🌼", "🌺", "🌻", "🏵️"]);
                     heartInterval = setInterval(() => {
                         let h = document.createElement("div"); h.className = "heart";
                         h.innerHTML = "🌸"; h.style.left = Math.random() * 100 + "vw";
                         container.appendChild(h); setTimeout(() => h.remove(), 5000);
-                    }, 600);
+                    }, 500);
                 }
             } else {
                 alert("Enter: love, sunrise, or rain!");
             }
         }
 
-        function setFlowers(list) {
-            const flowers = document.querySelectorAll(".flower");
-            flowers.forEach((f, i) => {
-                f.innerHTML = list[i];
-                setTimeout(() => f.classList.add("bloom"), i * 250);
+        function plant(flowerList) {
+            const flowerBed = document.getElementById("flower-bed");
+            flowerList.forEach((emoji, i) => {
+                const f = document.createElement("div");
+                f.className = "flower";
+                f.innerHTML = emoji;
+                flowerBed.appendChild(f);
+                // Delay blooming to look like they are growing one by one
+                setTimeout(() => f.classList.add("bloom"), i * 150);
             });
         }
     </script>
