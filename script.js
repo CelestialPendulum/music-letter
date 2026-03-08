@@ -6,11 +6,11 @@ let player = document.getElementById("player")
 
 let songs = {
 
-love: "box/Germany_&_Rome.mp3",
+love: "box/germany.mp3",
 
-sunset: "box/Summertown.mp3",
+sunset: "box/summertown.mp3",
 
-rain: "box/Stay.mp3"
+rain: "box/stay.mp3"
 
 }
 
@@ -30,3 +30,4 @@ alert("No song for that mood yet 🌻")
 
 
 }
+
