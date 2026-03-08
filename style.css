@@ -89,7 +89,7 @@ width:100%;
 
 height:150px;
 
-background:url("https://i.imgur.com/4NJl9bK.png");
+background:url("cozy.jpg");
 
 animation: sway 6s infinite alternate;
 
@@ -100,5 +100,6 @@ animation: sway 6s infinite alternate;
 from{ transform:translateX(-10px); }
 
 to{ transform:translateX(10px); }
+
 
 }
