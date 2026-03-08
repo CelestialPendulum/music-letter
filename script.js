@@ -3,9 +3,9 @@ function playMusic() {
   let player = document.getElementById("player");
 
   let songs = {
-    love: "box/germany.mp3",    // Must have box/ at the start
-    sunset: "box/summertown.mp3",
-    rain: "box/stay.mp3"
+    love: "./box/germany.mp3",    // Must have box/ at the start
+    sunset: "./box/summertown.mp3",
+    rain: "./box/stay.mp3"
   };
 
   if (songs[mood]) {
@@ -16,3 +16,4 @@ function playMusic() {
     alert("No song for that mood yet 🌻");
   }
 }
+
