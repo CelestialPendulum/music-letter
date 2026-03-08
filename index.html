@@ -18,81 +18,78 @@
             transition: background 2s ease;
         }
 
-        #effects-container {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 1;
-        }
+        /* Weather/Sun Layer */
+        #effects-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
+        .sun { position: absolute; width: 150px; height: 150px; background: #fbc02d; border-radius: 50%; bottom: -180px; left: 50%; transform: translateX(-50%); box-shadow: 0 0 60px #fbc02d; transition: bottom 4s ease-out; z-index: 2; border: 4px solid #fff9c4; }
 
+        /* The Radio Box */
         .garden {
             background: #fff3d6;
             border: 6px solid #8f6a3c;
             padding: 30px;
             text-align: center;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
-            z-index: 10;
+            box-shadow: 0 10px 0px #8f6a3c;
+            z-index: 100;
             position: relative;
         }
 
-        /* The Planted Flowers */
-        .flower-bed {
+        /* --- THE PIXEL MEADOW --- */
+        .meadow {
             position: absolute;
             bottom: 0;
             width: 100%;
-            height: 150px;
+            height: 120px;
             display: flex;
-            justify-content: space-around;
             align-items: flex-end;
-            z-index: 5;
-            padding-bottom: 20px;
+            z-index: 10;
+            /* Grass Background */
+            background: linear-gradient(transparent, #4caf50 20%);
+        }
+
+        /* Dense Grass Layer */
+        .grass-blade {
+            flex: 1;
+            height: 40px;
+            background: #2e7d32;
+            margin: 0 -1px; /* Overlap to remove spaces */
+            clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+            animation: wind 3s infinite alternate ease-in-out;
+        }
+
+        /* The Flowers */
+        .flower-container {
+            position: absolute;
+            bottom: 30px;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            gap: 0px; /* No space between flowers */
         }
 
         .flower {
-            font-size: 50px;
+            font-size: 60px;
+            display: inline-block;
             transform: scale(0);
-            transition: transform 1s cubic-bezier(0.18, 0.89, 0.32, 1.28);
-            filter: drop-shadow(2px 2px 0px #3a2a1a);
+            transition: transform 1.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            filter: contrast(1.2) saturate(1.5);
+            image-rendering: pixelated;
         }
 
-        .flower.bloom {
-            transform: scale(1);
-            animation: sway 4s infinite alternate ease-in-out;
-        }
+        .flower.bloom { transform: scale(1); animation: sway 5s infinite alternate ease-in-out; }
 
-        @keyframes sway {
-            from { transform: rotate(-5deg) scale(1); }
-            to { transform: rotate(5deg) scale(1.1); }
-        }
+        @keyframes wind { from { transform: skewX(-5deg); } to { transform: skewX(5deg); } }
+        @keyframes sway { from { transform: rotate(-8deg); } to { transform: rotate(8deg); } }
 
-        /* Weather and Sun Effects */
-        .drop { position: absolute; width: 2px; height: 10px; background: rgba(174, 194, 224, 0.8); animation: fall linear infinite; }
+        /* Effects */
+        .drop { position: absolute; width: 3px; height: 12px; background: #90caf9; animation: fall 0.8s linear infinite; }
         @keyframes fall { to { transform: translateY(100vh); } }
+        .heart { position: absolute; font-size: 20px; animation: float 4s linear forwards; }
+        @keyframes float { 0% { transform: translateY(100vh); opacity: 1; } 100% { transform: translateY(-10vh); opacity: 0; } }
 
-        .sun {
-            position: absolute;
-            width: 140px;
-            height: 140px;
-            background: radial-gradient(circle, #fff9c4, #fbc02d);
-            border-radius: 50%;
-            bottom: -180px;
-            left: 50%;
-            transform: translateX(-50%);
-            box-shadow: 0 0 80px #fbc02d;
-            transition: bottom 4s ease-out;
-            z-index: 2;
-        }
-
-        .heart { position: absolute; color: #ff85a1; font-size: 24px; animation: floatUp 4s linear forwards; }
-        @keyframes floatUp { 0% { transform: translateY(100vh) scale(0.5); opacity: 1; } 100% { transform: translateY(-10vh) scale(1.5); opacity: 0; } }
-
-        /* Interface Styling */
-        input { padding: 12px; border: 3px solid #8f6a3c; background: #fff; font-size: 16px; outline: none; margin-bottom: 10px; }
-        button { padding: 10px 20px; background: #7cc576; border: none; color: white; cursor: pointer; font-size: 16px; font-weight: bold; box-shadow: 0 4px #5da95a; }
-        button:active { transform: translateY(4px); box-shadow: 0 0px #5da95a; }
+        /* UI */
+        input { padding: 12px; border: 4px solid #8f6a3c; font-size: 16px; width: 200px; margin-bottom: 10px; }
+        button { padding: 12px 25px; background: #7cc576; border: none; color: white; cursor: pointer; font-size: 18px; font-weight: bold; border-bottom: 4px solid #4a8d45; }
+        button:active { transform: translateY(2px); border-bottom: 0; }
     </style>
 </head>
 <body>
@@ -101,37 +98,45 @@
     <div id="sun" class="sun"></div>
 
     <div class="garden">
-        <h1>Pixel Garden Radio</h1>
-        <p class="note">A flower for every mood 🌿</p>
-        
-        <input type="text" id="mood" placeholder="love, sunrise, rain">
-        <button onclick="playMusic()">Plant & Play 🎵</button>
-        
+        <h1>Pixel Radio 📻</h1>
+        <p>Type: love, sunrise, or rain</p>
+        <input type="text" id="mood" placeholder="...">
+        <br>
+        <button onclick="playMusic()">Bloom 🌸</button>
         <br><br>
         <audio id="player" controls></audio>
     </div>
 
-    <!-- The actual planted flowers -->
-    <div class="flower-bed" id="flower-bed">
-        <div class="flower" id="f1"></div>
-        <div class="flower" id="f2"></div>
-        <div class="flower" id="f3"></div>
-        <div class="flower" id="f4"></div>
-        <div class="flower" id="f5"></div>
+    <!-- The Meadow -->
+    <div class="meadow">
+        <!-- Generate 50 blades of grass -->
+        <script>
+            for(let i=0; i<60; i++) document.write('<div class="grass-blade"></div>');
+        </script>
+        
+        <div class="flower-container" id="flower-bed">
+            <div class="flower"></div>
+            <div class="flower"></div>
+            <div class="flower"></div>
+            <div class="flower"></div>
+            <div class="flower"></div>
+            <div class="flower"></div>
+            <div class="flower"></div>
+            <div class="flower"></div>
+        </div>
     </div>
 
     <script>
         let heartInterval = null;
 
         function playMusic() {
-            const moodInput = document.getElementById("mood");
+            const mood = document.getElementById("mood").value.toLowerCase().trim();
             const player = document.getElementById("player");
-            const mood = moodInput.value.toLowerCase().trim();
             const container = document.getElementById("effects-container");
             const sun = document.getElementById("sun");
             const flowers = document.querySelectorAll(".flower");
 
-            // Reset Everything
+            // Reset
             container.innerHTML = "";
             sun.style.bottom = "-180px";
             if (heartInterval) clearInterval(heartInterval);
@@ -146,51 +151,41 @@
 
             if (songs[mood]) {
                 player.src = songs[mood];
-                player.load();
                 player.play();
 
                 if (mood === "rain") {
-                    document.body.style.background = "linear-gradient(#4b6cb7, #182848)";
-                    // Plant Lilacs and Lilies for rain
-                    setFlowers(["🪻", "🪷", "🪻", "🪷", "🪻"]);
-                    for(let i=0; i<80; i++) {
-                        let drop = document.createElement("div");
-                        drop.className = "drop";
-                        drop.style.left = Math.random() * 100 + "vw";
-                        drop.style.animationDuration = Math.random() * 0.5 + 0.5 + "s";
-                        container.appendChild(drop);
+                    document.body.style.background = "linear-gradient(#2c3e50, #000000)";
+                    setFlowers(["🪻", "🪷", "🪻", "🪷", "🪻", "🪷", "🪻", "🪷"]);
+                    for(let i=0; i<100; i++) {
+                        let d = document.createElement("div"); d.className = "drop";
+                        d.style.left = Math.random() * 100 + "vw"; d.style.animationDelay = Math.random() + "s";
+                        container.appendChild(d);
                     }
                 } 
                 else if (mood === "sunrise") {
-                    document.body.style.background = "linear-gradient(#a1887f, #f06292, #fdd835)";
-                    sun.style.bottom = "25%";
-                    // Plant Sunflowers and Gerbera for sunrise
-                    setFlowers(["🌻", "🌼", "🌻", "🌼", "🌻"]);
+                    document.body.style.background = "linear-gradient(#ff7e5f, #feb47b, #ffcc33)";
+                    sun.style.bottom = "15%";
+                    setFlowers(["🌻", "🌼", "🌻", "🌼", "🌻", "🌼", "🌻", "🌼"]);
                 }
                 else if (mood === "love") {
-                    document.body.style.background = "linear-gradient(#ff9a9e, #fecfef)";
-                    // Plant Roses and Tulips for love
-                    setFlowers(["🌹", "🌷", "🌹", "🌷", "🌹"]);
+                    document.body.style.background = "linear-gradient(#ff9a9e, #fad0c4)";
+                    setFlowers(["🌹", "🌷", "🌹", "🌷", "🌹", "🌷", "🌹", "🌷"]);
                     heartInterval = setInterval(() => {
-                        let heart = document.createElement("div");
-                        heart.className = "heart";
-                        heart.innerHTML = Math.random() > 0.5 ? "❤️" : "✨";
-                        heart.style.left = Math.random() * 100 + "vw";
-                        heart.style.animationDuration = Math.random() * 2 + 3 + "s";
-                        container.appendChild(heart);
-                        setTimeout(() => heart.remove(), 4000);
-                    }, 450);
+                        let h = document.createElement("div"); h.className = "heart";
+                        h.innerHTML = "❤️"; h.style.left = Math.random() * 100 + "vw";
+                        container.appendChild(h); setTimeout(() => h.remove(), 4000);
+                    }, 400);
                 }
             } else {
-                alert("Try typing: love, sunrise, or rain 🌻");
+                alert("Enter: love, sunrise, or rain!");
             }
         }
 
-        function setFlowers(emojiList) {
+        function setFlowers(list) {
             const flowers = document.querySelectorAll(".flower");
             flowers.forEach((f, i) => {
-                f.innerHTML = emojiList[i];
-                setTimeout(() => f.classList.add("bloom"), i * 200);
+                f.innerHTML = list[i];
+                setTimeout(() => f.classList.add("bloom"), i * 150);
             });
         }
     </script>
