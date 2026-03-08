@@ -38,63 +38,40 @@
             position: relative;
         }
 
-        h1 { color: #6b4e2e; margin-top: 0; }
-        .note { color: #7a5a35; margin-bottom: 20px; }
-
-        input {
-            padding: 12px;
-            border: 3px solid #8f6a3c;
-            background: #fff;
-            font-size: 16px;
-            outline: none;
-            margin-bottom: 10px;
-        }
-
-        button {
-            padding: 10px 20px;
-            background: #7cc576;
-            border: none;
-            color: white;
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: bold;
-            box-shadow: 0 4px #5da95a;
-        }
-
-        button:active {
-            box-shadow: 0 0px #5da95a;
-            transform: translateY(4px);
-        }
-
-        .flowers-floor {
+        /* The Planted Flowers */
+        .flower-bed {
             position: absolute;
             bottom: 0;
             width: 100%;
-            height: 120px;
-            background: url("photo/cozy.jpg");
-            background-repeat: repeat-x;
-            background-size: contain;
-            image-rendering: pixelated;
+            height: 150px;
+            display: flex;
+            justify-content: space-around;
+            align-items: flex-end;
             z-index: 5;
-            animation: sway 6s infinite alternate ease-in-out;
+            padding-bottom: 20px;
+        }
+
+        .flower {
+            font-size: 50px;
+            transform: scale(0);
+            transition: transform 1s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+            filter: drop-shadow(2px 2px 0px #3a2a1a);
+        }
+
+        .flower.bloom {
+            transform: scale(1);
+            animation: sway 4s infinite alternate ease-in-out;
         }
 
         @keyframes sway {
-            from { transform: translateX(-15px); }
-            to { transform: translateX(15px); }
+            from { transform: rotate(-5deg) scale(1); }
+            to { transform: rotate(5deg) scale(1.1); }
         }
 
-        /* Weather Effects */
-        .drop {
-            position: absolute;
-            width: 2px;
-            height: 10px;
-            background: rgba(174, 194, 224, 0.8);
-            animation: fall linear infinite;
-        }
+        /* Weather and Sun Effects */
+        .drop { position: absolute; width: 2px; height: 10px; background: rgba(174, 194, 224, 0.8); animation: fall linear infinite; }
         @keyframes fall { to { transform: translateY(100vh); } }
 
-        /* Sunrise Sun - Glowing Gold */
         .sun {
             position: absolute;
             width: 140px;
@@ -105,20 +82,17 @@
             left: 50%;
             transform: translateX(-50%);
             box-shadow: 0 0 80px #fbc02d;
-            transition: bottom 4s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+            transition: bottom 4s ease-out;
             z-index: 2;
         }
 
-        .heart {
-            position: absolute;
-            color: #ff85a1;
-            font-size: 24px;
-            animation: floatUp 4s linear forwards;
-        }
-        @keyframes floatUp {
-            0% { transform: translateY(100vh) scale(0.5); opacity: 1; }
-            100% { transform: translateY(-10vh) scale(1.5); opacity: 0; }
-        }
+        .heart { position: absolute; color: #ff85a1; font-size: 24px; animation: floatUp 4s linear forwards; }
+        @keyframes floatUp { 0% { transform: translateY(100vh) scale(0.5); opacity: 1; } 100% { transform: translateY(-10vh) scale(1.5); opacity: 0; } }
+
+        /* Interface Styling */
+        input { padding: 12px; border: 3px solid #8f6a3c; background: #fff; font-size: 16px; outline: none; margin-bottom: 10px; }
+        button { padding: 10px 20px; background: #7cc576; border: none; color: white; cursor: pointer; font-size: 16px; font-weight: bold; box-shadow: 0 4px #5da95a; }
+        button:active { transform: translateY(4px); box-shadow: 0 0px #5da95a; }
     </style>
 </head>
 <body>
@@ -128,16 +102,23 @@
 
     <div class="garden">
         <h1>Pixel Garden Radio</h1>
-        <p class="note">What is the mood today? 🌿</p>
+        <p class="note">A flower for every mood 🌿</p>
         
         <input type="text" id="mood" placeholder="love, sunrise, rain">
-        <button onclick="playMusic()">Play 🎵</button>
+        <button onclick="playMusic()">Plant & Play 🎵</button>
         
         <br><br>
         <audio id="player" controls></audio>
     </div>
 
-    <div class="flowers-floor"></div>
+    <!-- The actual planted flowers -->
+    <div class="flower-bed" id="flower-bed">
+        <div class="flower" id="f1"></div>
+        <div class="flower" id="f2"></div>
+        <div class="flower" id="f3"></div>
+        <div class="flower" id="f4"></div>
+        <div class="flower" id="f5"></div>
+    </div>
 
     <script>
         let heartInterval = null;
@@ -148,14 +129,15 @@
             const mood = moodInput.value.toLowerCase().trim();
             const container = document.getElementById("effects-container");
             const sun = document.getElementById("sun");
+            const flowers = document.querySelectorAll(".flower");
 
             // Reset Everything
             container.innerHTML = "";
             sun.style.bottom = "-180px";
             if (heartInterval) clearInterval(heartInterval);
             document.body.style.background = "linear-gradient(#ffd89b, #f6b46c)";
+            flowers.forEach(f => f.classList.remove("bloom"));
 
-            // Update: Changed sunset key to sunrise
             const songs = {
                 love: "music/germany.mp3",
                 sunrise: "music/summertown.mp3",
@@ -165,11 +147,13 @@
             if (songs[mood]) {
                 player.src = songs[mood];
                 player.load();
-                player.play().catch(e => console.log("User must interact first"));
+                player.play();
 
                 if (mood === "rain") {
                     document.body.style.background = "linear-gradient(#4b6cb7, #182848)";
-                    for(let i=0; i<100; i++) {
+                    // Plant Lilacs and Lilies for rain
+                    setFlowers(["🪻", "🪷", "🪻", "🪷", "🪻"]);
+                    for(let i=0; i<80; i++) {
                         let drop = document.createElement("div");
                         drop.className = "drop";
                         drop.style.left = Math.random() * 100 + "vw";
@@ -178,25 +162,36 @@
                     }
                 } 
                 else if (mood === "sunrise") {
-                    // Sunrise Gradient: Light Purple to Golden Yellow
                     document.body.style.background = "linear-gradient(#a1887f, #f06292, #fdd835)";
                     sun.style.bottom = "25%";
+                    // Plant Sunflowers and Gerbera for sunrise
+                    setFlowers(["🌻", "🌼", "🌻", "🌼", "🌻"]);
                 }
                 else if (mood === "love") {
                     document.body.style.background = "linear-gradient(#ff9a9e, #fecfef)";
+                    // Plant Roses and Tulips for love
+                    setFlowers(["🌹", "🌷", "🌹", "🌷", "🌹"]);
                     heartInterval = setInterval(() => {
                         let heart = document.createElement("div");
                         heart.className = "heart";
-                        heart.innerHTML = Math.random() > 0.5 ? "❤️" : "🌸";
+                        heart.innerHTML = Math.random() > 0.5 ? "❤️" : "✨";
                         heart.style.left = Math.random() * 100 + "vw";
                         heart.style.animationDuration = Math.random() * 2 + 3 + "s";
                         container.appendChild(heart);
                         setTimeout(() => heart.remove(), 4000);
-                    }, 400);
+                    }, 450);
                 }
             } else {
-                alert("No song for that mood yet 🌻. Try: love, sunrise, or rain.");
+                alert("Try typing: love, sunrise, or rain 🌻");
             }
+        }
+
+        function setFlowers(emojiList) {
+            const flowers = document.querySelectorAll(".flower");
+            flowers.forEach((f, i) => {
+                f.innerHTML = emojiList[i];
+                setTimeout(() => f.classList.add("bloom"), i * 200);
+            });
         }
     </script>
 </body>
