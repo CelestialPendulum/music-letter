@@ -1,38 +1,113 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pixel Garden Radio</title>
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(#ffd89b, #f6b46c);
+            font-family: monospace;
+            image-rendering: pixelated;
+            overflow: hidden;
+        }
 
-<title>Pixel Garden Music</title>
+        .garden {
+            background: #fff3d6;
+            border: 6px solid #8f6a3c;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            z-index: 10;
+            position: relative;
+        }
 
-<link rel="stylesheet" href="style.css">
+        h1 { color: #6b4e2e; }
+        .note { color: #7a5a35; }
 
+        input {
+            padding: 10px;
+            border: 3px solid #8f6a3c;
+            background: #fff;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background: #7cc576;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover { background: #5da95a; }
+
+        .flowers {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 150px;
+            background: url("photo/cozy.jpg");
+            background-repeat: repeat-x;
+            background-size: contain;
+            image-rendering: pixelated;
+            animation: sway 6s infinite alternate;
+        }
+
+        @keyframes sway {
+            from { transform: translateX(-10px); }
+            to { transform: translateX(10px); }
+        }
+    </style>
 </head>
-
 <body>
 
-<div class="garden">
+    <div class="garden">
+        <h1>Pixel Garden Radio</h1>
+        <p class="note">Write a feeling and the garden will play a song 🌿</p>
+        
+        <input type="text" id="mood" placeholder="love, sunset, rain">
+        <button onclick="playMusic()">Play</button>
+        
+        <br><br>
+        <audio id="player" controls></audio>
+    </div>
 
-<h1>Pixel Garden Radio</h1>
+    <div class="flowers"></div>
 
-<p class="note">
-Write a feeling and the garden will play a song 🌿
-</p>
+    <script>
+        function playMusic() {
+            const moodInput = document.getElementById("mood");
+            const player = document.getElementById("player");
+            const mood = moodInput.value.toLowerCase().trim();
 
-<input type="text" id="mood" placeholder="love, sunset, rain">
+            // UPDATED: Now pointing to your 'music' folder
+            const songs = {
+                love: "music/germany.mp3",
+                sunset: "music/summertown.mp3",
+                rain: "music/stay.mp3"
+            };
 
-<button onclick="playMusic()">Play</button>
-
-<br><br>
-
-<audio id="player" controls></audio>
-
-</div>
-
-<div class="flowers"></div>
-
-<script src="script.js"></script>
+            if (songs[mood]) {
+                player.src = songs[mood];
+                player.load(); 
+                
+                player.play().catch(error => {
+                    console.error("Playback error:", error);
+                    alert("The music is ready! Click the 'Play' button on the audio bar below to start 🎵");
+                });
+            } else {
+                alert("No song for that mood yet 🌻. Try typing: love, sunset, or rain.");
+            }
+        }
+    </script>
 
 </body>
 </html>
