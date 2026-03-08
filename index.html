@@ -84,7 +84,7 @@
             to { transform: translateX(15px); }
         }
 
-        /* Rain */
+        /* Weather Effects */
         .drop {
             position: absolute;
             width: 2px;
@@ -94,22 +94,21 @@
         }
         @keyframes fall { to { transform: translateY(100vh); } }
 
-        /* Sunset Sun */
+        /* Sunrise Sun - Glowing Gold */
         .sun {
             position: absolute;
-            width: 120px;
-            height: 120px;
-            background: #ff6b6b;
+            width: 140px;
+            height: 140px;
+            background: radial-gradient(circle, #fff9c4, #fbc02d);
             border-radius: 50%;
-            bottom: -150px;
+            bottom: -180px;
             left: 50%;
             transform: translateX(-50%);
-            box-shadow: 0 0 50px #ff6b6b;
-            transition: bottom 3s ease-out;
+            box-shadow: 0 0 80px #fbc02d;
+            transition: bottom 4s cubic-bezier(0.18, 0.89, 0.32, 1.28);
             z-index: 2;
         }
 
-        /* Love Hearts/Flowers */
         .heart {
             position: absolute;
             color: #ff85a1;
@@ -131,7 +130,7 @@
         <h1>Pixel Garden Radio</h1>
         <p class="note">What is the mood today? 🌿</p>
         
-        <input type="text" id="mood" placeholder="love, sunset, rain">
+        <input type="text" id="mood" placeholder="love, sunrise, rain">
         <button onclick="playMusic()">Play 🎵</button>
         
         <br><br>
@@ -141,7 +140,7 @@
     <div class="flowers-floor"></div>
 
     <script>
-        let heartInterval = null; // Store the interval so we can stop it
+        let heartInterval = null;
 
         function playMusic() {
             const moodInput = document.getElementById("mood");
@@ -150,24 +149,24 @@
             const container = document.getElementById("effects-container");
             const sun = document.getElementById("sun");
 
-            // 1. CLEANUP PREVIOUS EFFECTS
+            // Reset Everything
             container.innerHTML = "";
-            sun.style.bottom = "-150px";
-            if (heartInterval) clearInterval(heartInterval); // STOP THE HEARTS
+            sun.style.bottom = "-180px";
+            if (heartInterval) clearInterval(heartInterval);
             document.body.style.background = "linear-gradient(#ffd89b, #f6b46c)";
 
+            // Update: Changed sunset key to sunrise
             const songs = {
                 love: "music/germany.mp3",
-                sunset: "music/summertown.mp3",
+                sunrise: "music/summertown.mp3",
                 rain: "music/stay.mp3"
             };
 
             if (songs[mood]) {
                 player.src = songs[mood];
                 player.load();
-                player.play().catch(e => console.log("Play blocked by browser"));
+                player.play().catch(e => console.log("User must interact first"));
 
-                // 2. TRIGGER NEW VISUALS
                 if (mood === "rain") {
                     document.body.style.background = "linear-gradient(#4b6cb7, #182848)";
                     for(let i=0; i<100; i++) {
@@ -178,13 +177,13 @@
                         container.appendChild(drop);
                     }
                 } 
-                else if (mood === "sunset") {
-                    document.body.style.background = "linear-gradient(#451e3e, #fe5151)";
-                    sun.style.bottom = "20%";
+                else if (mood === "sunrise") {
+                    // Sunrise Gradient: Light Purple to Golden Yellow
+                    document.body.style.background = "linear-gradient(#a1887f, #f06292, #fdd835)";
+                    sun.style.bottom = "25%";
                 }
                 else if (mood === "love") {
                     document.body.style.background = "linear-gradient(#ff9a9e, #fecfef)";
-                    // START THE HEARTS
                     heartInterval = setInterval(() => {
                         let heart = document.createElement("div");
                         heart.className = "heart";
@@ -196,7 +195,7 @@
                     }, 400);
                 }
             } else {
-                alert("No song for that mood yet 🌻. Try: love, sunset, or rain.");
+                alert("No song for that mood yet 🌻. Try: love, sunrise, or rain.");
             }
         }
     </script>
