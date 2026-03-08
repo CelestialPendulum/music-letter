@@ -18,7 +18,6 @@
             transition: background 2s ease;
         }
 
-        /* Weather Effects Container */
         #effects-container {
             position: absolute;
             top: 0;
@@ -85,8 +84,6 @@
             to { transform: translateX(15px); }
         }
 
-        /* --- MOOD ANIMATIONS --- */
-
         /* Rain */
         .drop {
             position: absolute;
@@ -112,7 +109,7 @@
             z-index: 2;
         }
 
-        /* Love Hearts */
+        /* Love Hearts/Flowers */
         .heart {
             position: absolute;
             color: #ff85a1;
@@ -144,6 +141,8 @@
     <div class="flowers-floor"></div>
 
     <script>
+        let heartInterval = null; // Store the interval so we can stop it
+
         function playMusic() {
             const moodInput = document.getElementById("mood");
             const player = document.getElementById("player");
@@ -151,9 +150,10 @@
             const container = document.getElementById("effects-container");
             const sun = document.getElementById("sun");
 
-            // Clear previous effects
+            // 1. CLEANUP PREVIOUS EFFECTS
             container.innerHTML = "";
             sun.style.bottom = "-150px";
+            if (heartInterval) clearInterval(heartInterval); // STOP THE HEARTS
             document.body.style.background = "linear-gradient(#ffd89b, #f6b46c)";
 
             const songs = {
@@ -165,9 +165,9 @@
             if (songs[mood]) {
                 player.src = songs[mood];
                 player.load();
-                player.play();
+                player.play().catch(e => console.log("Play blocked by browser"));
 
-                // Trigger Visuals
+                // 2. TRIGGER NEW VISUALS
                 if (mood === "rain") {
                     document.body.style.background = "linear-gradient(#4b6cb7, #182848)";
                     for(let i=0; i<100; i++) {
@@ -184,7 +184,8 @@
                 }
                 else if (mood === "love") {
                     document.body.style.background = "linear-gradient(#ff9a9e, #fecfef)";
-                    setInterval(() => {
+                    // START THE HEARTS
+                    heartInterval = setInterval(() => {
                         let heart = document.createElement("div");
                         heart.className = "heart";
                         heart.innerHTML = Math.random() > 0.5 ? "❤️" : "🌸";
@@ -192,7 +193,7 @@
                         heart.style.animationDuration = Math.random() * 2 + 3 + "s";
                         container.appendChild(heart);
                         setTimeout(() => heart.remove(), 4000);
-                    }, 300);
+                    }, 400);
                 }
             } else {
                 alert("No song for that mood yet 🌻. Try: love, sunset, or rain.");
