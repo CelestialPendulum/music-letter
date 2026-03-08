@@ -89,7 +89,7 @@ width:100%;
 
 height:150px;
 
-background:url("cozy.jpg");
+background:url("photo/cozy.jpg");
 
 animation: sway 6s infinite alternate;
 
@@ -103,3 +103,4 @@ to{ transform:translateX(10px); }
 
 
 }
+
