@@ -12,84 +12,86 @@
             justify-content: center;
             align-items: center;
             background: linear-gradient(#ffd89b, #f6b46c);
-            font-family: 'Courier New', Courier, monospace;
-            image-rendering: pixelated;
+            font-family: 'Georgia', serif; /* More artistic font */
             overflow: hidden;
             transition: background 2s ease;
         }
 
-        /* Weather/Sun Layer */
         #effects-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
-        .sun { position: absolute; width: 150px; height: 150px; background: #fbc02d; border-radius: 50%; bottom: -180px; left: 50%; transform: translateX(-50%); box-shadow: 0 0 60px #fbc02d; transition: bottom 4s ease-out; z-index: 2; border: 4px solid #fff9c4; }
-
-        /* The Radio Box */
-        .garden {
-            background: #fff3d6;
-            border: 6px solid #8f6a3c;
-            padding: 30px;
-            text-align: center;
-            box-shadow: 0 10px 0px #8f6a3c;
-            z-index: 100;
-            position: relative;
+        
+        .sun { 
+            position: absolute; width: 180px; height: 180px; background: #fff176; 
+            border-radius: 50%; bottom: -200px; left: 50%; transform: translateX(-50%); 
+            box-shadow: 0 0 100px #fbc02d; transition: bottom 4s ease-in-out; z-index: 2; 
         }
 
-        /* --- THE PIXEL MEADOW --- */
+        .garden-box {
+            background: rgba(255, 243, 214, 0.9);
+            border: 4px solid #8f6a3c;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+            z-index: 100;
+            position: relative;
+            border-radius: 2px;
+        }
+
+        /* --- THE PAINTED MEADOW --- */
         .meadow {
             position: absolute;
             bottom: 0;
             width: 100%;
-            height: 120px;
-            display: flex;
-            align-items: flex-end;
+            height: 35vh;
             z-index: 10;
-            /* Grass Background */
-            background: linear-gradient(transparent, #4caf50 20%);
+            /* Creates the "painted" ground effect */
+            background: linear-gradient(to top, #4b6329, #8d9c3e, transparent);
+            filter: blur(8px); /* Softens the ground like brushstrokes */
         }
 
-        /* Dense Grass Layer */
-        .grass-blade {
-            flex: 1;
-            height: 40px;
-            background: #2e7d32;
-            margin: 0 -1px; /* Overlap to remove spaces */
-            clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
-            animation: wind 3s infinite alternate ease-in-out;
-        }
-
-        /* The Flowers */
         .flower-container {
             position: absolute;
-            bottom: 30px;
+            bottom: 20px;
             width: 100%;
+            height: 300px;
             display: flex;
-            justify-content: center;
-            gap: 0px; /* No space between flowers */
+            justify-content: space-around;
+            align-items: flex-end;
+            padding: 0 20px;
+            box-sizing: border-box;
+            z-index: 15;
         }
 
         .flower {
-            font-size: 60px;
+            font-size: 80px;
             display: inline-block;
             transform: scale(0);
-            transition: transform 1.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            filter: contrast(1.2) saturate(1.5);
-            image-rendering: pixelated;
+            transition: transform 2s cubic-bezier(0.1, 0.5, 0.1, 1);
+            /* THE PAINT EFFECT: Blurs slightly then adds contrast to look like paint clumps */
+            filter: blur(1px) contrast(1.5) drop-shadow(5px 5px 2px rgba(0,0,0,0.2));
         }
 
-        .flower.bloom { transform: scale(1); animation: sway 5s infinite alternate ease-in-out; }
+        .flower.bloom { transform: scale(1) translateY(0); animation: sway 8s infinite alternate ease-in-out; }
 
-        @keyframes wind { from { transform: skewX(-5deg); } to { transform: skewX(5deg); } }
-        @keyframes sway { from { transform: rotate(-8deg); } to { transform: rotate(8deg); } }
+        /* Randomizes height slightly for a wild look */
+        .flower:nth-child(even) { margin-bottom: 20px; font-size: 95px; }
+        .flower:nth-child(3n) { margin-bottom: -10px; font-size: 70px; }
 
-        /* Effects */
-        .drop { position: absolute; width: 3px; height: 12px; background: #90caf9; animation: fall 0.8s linear infinite; }
+        @keyframes sway { 
+            from { transform: rotate(-3deg) translateX(-5px); } 
+            to { transform: rotate(3deg) translateX(5px); } 
+        }
+
+        /* Weather */
+        .drop { position: absolute; width: 2px; height: 15px; background: #aebce0; animation: fall 1s linear infinite; opacity: 0.6; }
         @keyframes fall { to { transform: translateY(100vh); } }
-        .heart { position: absolute; font-size: 20px; animation: float 4s linear forwards; }
-        @keyframes float { 0% { transform: translateY(100vh); opacity: 1; } 100% { transform: translateY(-10vh); opacity: 0; } }
+        .heart { position: absolute; font-size: 25px; animation: float 5s linear forwards; filter: blur(1px); }
+        @keyframes float { 0% { transform: translateY(100vh); opacity: 0.8; } 100% { transform: translateY(-10vh); opacity: 0; } }
 
         /* UI */
-        input { padding: 12px; border: 4px solid #8f6a3c; font-size: 16px; width: 200px; margin-bottom: 10px; }
-        button { padding: 12px 25px; background: #7cc576; border: none; color: white; cursor: pointer; font-size: 18px; font-weight: bold; border-bottom: 4px solid #4a8d45; }
-        button:active { transform: translateY(2px); border-bottom: 0; }
+        h1 { color: #5d4037; font-style: italic; margin-top: 0; }
+        input { padding: 12px; border: 2px solid #8f6a3c; font-size: 16px; background: transparent; width: 180px; outline: none; }
+        button { padding: 12px 30px; background: #5d4037; border: none; color: white; cursor: pointer; font-size: 16px; margin-top: 10px; transition: 0.3s; }
+        button:hover { background: #8f6a3c; }
     </style>
 </head>
 <body>
@@ -97,33 +99,27 @@
     <div id="effects-container"></div>
     <div id="sun" class="sun"></div>
 
-    <div class="garden">
+    <div class="garden-box">
         <h1>Garden of Ridleys 🌸</h1>
-        <p>Type: love, sunrise, or rain</p>
-        <input type="text" id="mood" placeholder="...">
-        <br>
-        <button onclick="playMusic()">Bloom 🌸</button>
+        <p style="color: #8d6e63;">Type: love, sunrise, or rain</p>
+        <input type="text" id="mood" placeholder="..."><br>
+        <button onclick="playMusic()">Play</button>
         <br><br>
         <audio id="player" controls></audio>
     </div>
 
-    <!-- The Meadow -->
-    <div class="meadow">
-        <!-- Generate 50 blades of grass -->
-        <script>
-            for(let i=0; i<60; i++) document.write('<div class="grass-blade"></div>');
-        </script>
-        
-        <div class="flower-container" id="flower-bed">
-            <div class="flower"></div>
-            <div class="flower"></div>
-            <div class="flower"></div>
-            <div class="flower"></div>
-            <div class="flower"></div>
-            <div class="flower"></div>
-            <div class="flower"></div>
-            <div class="flower"></div>
-        </div>
+    <!-- Background Meadow -->
+    <div class="meadow"></div>
+
+    <!-- Flowers Layer -->
+    <div class="flower-container">
+        <div class="flower"></div>
+        <div class="flower"></div>
+        <div class="flower"></div>
+        <div class="flower"></div>
+        <div class="flower"></div>
+        <div class="flower"></div>
+        <div class="flower"></div>
     </div>
 
     <script>
@@ -136,9 +132,8 @@
             const sun = document.getElementById("sun");
             const flowers = document.querySelectorAll(".flower");
 
-            // Reset
             container.innerHTML = "";
-            sun.style.bottom = "-180px";
+            sun.style.bottom = "-200px";
             if (heartInterval) clearInterval(heartInterval);
             document.body.style.background = "linear-gradient(#ffd89b, #f6b46c)";
             flowers.forEach(f => f.classList.remove("bloom"));
@@ -154,27 +149,28 @@
                 player.play();
 
                 if (mood === "rain") {
-                    document.body.style.background = "linear-gradient(#2c3e50, #000000)";
-                    setFlowers(["🪻", "🪷", "🪻", "🪷", "🪻", "🪷", "🪻", "🪷"]);
-                    for(let i=0; i<100; i++) {
+                    document.body.style.background = "linear-gradient(#37474f, #1a237e)";
+                    setFlowers(["🪻", "🪷", "🪻", "🪷", "🪻", "🪷", "🪻"]);
+                    for(let i=0; i<60; i++) {
                         let d = document.createElement("div"); d.className = "drop";
                         d.style.left = Math.random() * 100 + "vw"; d.style.animationDelay = Math.random() + "s";
                         container.appendChild(d);
                     }
                 } 
                 else if (mood === "sunrise") {
-                    document.body.style.background = "linear-gradient(#ff7e5f, #feb47b, #ffcc33)";
-                    sun.style.bottom = "15%";
-                    setFlowers(["🌻", "🌼", "🌻", "🌼", "🌻", "🌼", "🌻", "🌼"]);
+                    document.body.style.background = "linear-gradient(#ffab91, #ffd54f, #fff176)";
+                    sun.style.bottom = "10%";
+                    // These match the white/yellow flowers in your painting
+                    setFlowers(["🌼", "💮", "🌼", "💮", "🌼", "💮", "🌼"]);
                 }
                 else if (mood === "love") {
-                    document.body.style.background = "linear-gradient(#ff9a9e, #fad0c4)";
-                    setFlowers(["🌹", "🌷", "🌹", "🌷", "🌹", "🌷", "🌹", "🌷"]);
+                    document.body.style.background = "linear-gradient(#f48fb1, #fce4ec)";
+                    setFlowers(["🌹", "🌸", "🌹", "🌸", "🌹", "🌸", "🌹"]);
                     heartInterval = setInterval(() => {
                         let h = document.createElement("div"); h.className = "heart";
-                        h.innerHTML = "❤️"; h.style.left = Math.random() * 100 + "vw";
-                        container.appendChild(h); setTimeout(() => h.remove(), 4000);
-                    }, 400);
+                        h.innerHTML = "🌸"; h.style.left = Math.random() * 100 + "vw";
+                        container.appendChild(h); setTimeout(() => h.remove(), 5000);
+                    }, 600);
                 }
             } else {
                 alert("Enter: love, sunrise, or rain!");
@@ -185,10 +181,9 @@
             const flowers = document.querySelectorAll(".flower");
             flowers.forEach((f, i) => {
                 f.innerHTML = list[i];
-                setTimeout(() => f.classList.add("bloom"), i * 150);
+                setTimeout(() => f.classList.add("bloom"), i * 250);
             });
         }
     </script>
 </body>
 </html>
-
