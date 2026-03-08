@@ -7,9 +7,9 @@ function playMusic() {
 
   // These paths match your 'box' folder and lowercase filenames exactly
   const songs = {
-    love: "box/germany.mp3",
-    sunset: "box/summertown.mp3",
-    rain: "box/stay.mp3"
+    love: "music/germany.mp3",
+    sunset: "music/summertown.mp3",
+    rain: "music/stay.mp3"
   };
 
   if (songs[mood]) {
@@ -24,3 +24,4 @@ function playMusic() {
     alert("No song for that mood yet 🌻");
   }
 }
+
