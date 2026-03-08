@@ -12,9 +12,21 @@
             justify-content: center;
             align-items: center;
             background: linear-gradient(#ffd89b, #f6b46c);
-            font-family: monospace;
+            font-family: 'Courier New', Courier, monospace;
             image-rendering: pixelated;
             overflow: hidden;
+            transition: background 2s ease;
+        }
+
+        /* Weather Effects Container */
+        #effects-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
         }
 
         .garden {
@@ -27,14 +39,15 @@
             position: relative;
         }
 
-        h1 { color: #6b4e2e; }
-        .note { color: #7a5a35; }
+        h1 { color: #6b4e2e; margin-top: 0; }
+        .note { color: #7a5a35; margin-bottom: 20px; }
 
         input {
-            padding: 10px;
+            padding: 12px;
             border: 3px solid #8f6a3c;
             background: #fff;
             font-size: 16px;
+            outline: none;
             margin-bottom: 10px;
         }
 
@@ -45,50 +58,104 @@
             color: white;
             cursor: pointer;
             font-size: 16px;
+            font-weight: bold;
+            box-shadow: 0 4px #5da95a;
         }
 
-        button:hover { background: #5da95a; }
+        button:active {
+            box-shadow: 0 0px #5da95a;
+            transform: translateY(4px);
+        }
 
-        .flowers {
+        .flowers-floor {
             position: absolute;
             bottom: 0;
             width: 100%;
-            height: 150px;
+            height: 120px;
             background: url("photo/cozy.jpg");
             background-repeat: repeat-x;
             background-size: contain;
             image-rendering: pixelated;
-            animation: sway 6s infinite alternate;
+            z-index: 5;
+            animation: sway 6s infinite alternate ease-in-out;
         }
 
         @keyframes sway {
-            from { transform: translateX(-10px); }
-            to { transform: translateX(10px); }
+            from { transform: translateX(-15px); }
+            to { transform: translateX(15px); }
+        }
+
+        /* --- MOOD ANIMATIONS --- */
+
+        /* Rain */
+        .drop {
+            position: absolute;
+            width: 2px;
+            height: 10px;
+            background: rgba(174, 194, 224, 0.8);
+            animation: fall linear infinite;
+        }
+        @keyframes fall { to { transform: translateY(100vh); } }
+
+        /* Sunset Sun */
+        .sun {
+            position: absolute;
+            width: 120px;
+            height: 120px;
+            background: #ff6b6b;
+            border-radius: 50%;
+            bottom: -150px;
+            left: 50%;
+            transform: translateX(-50%);
+            box-shadow: 0 0 50px #ff6b6b;
+            transition: bottom 3s ease-out;
+            z-index: 2;
+        }
+
+        /* Love Hearts */
+        .heart {
+            position: absolute;
+            color: #ff85a1;
+            font-size: 24px;
+            animation: floatUp 4s linear forwards;
+        }
+        @keyframes floatUp {
+            0% { transform: translateY(100vh) scale(0.5); opacity: 1; }
+            100% { transform: translateY(-10vh) scale(1.5); opacity: 0; }
         }
     </style>
 </head>
 <body>
 
+    <div id="effects-container"></div>
+    <div id="sun" class="sun"></div>
+
     <div class="garden">
         <h1>Pixel Garden Radio</h1>
-        <p class="note">Write a feeling and the garden will play a song 🌿</p>
+        <p class="note">What is the mood today? 🌿</p>
         
         <input type="text" id="mood" placeholder="love, sunset, rain">
-        <button onclick="playMusic()">Play</button>
+        <button onclick="playMusic()">Play 🎵</button>
         
         <br><br>
         <audio id="player" controls></audio>
     </div>
 
-    <div class="flowers"></div>
+    <div class="flowers-floor"></div>
 
     <script>
         function playMusic() {
             const moodInput = document.getElementById("mood");
             const player = document.getElementById("player");
             const mood = moodInput.value.toLowerCase().trim();
+            const container = document.getElementById("effects-container");
+            const sun = document.getElementById("sun");
 
-            // UPDATED: Now pointing to your 'music' folder
+            // Clear previous effects
+            container.innerHTML = "";
+            sun.style.bottom = "-150px";
+            document.body.style.background = "linear-gradient(#ffd89b, #f6b46c)";
+
             const songs = {
                 love: "music/germany.mp3",
                 sunset: "music/summertown.mp3",
@@ -97,17 +164,40 @@
 
             if (songs[mood]) {
                 player.src = songs[mood];
-                player.load(); 
-                
-                player.play().catch(error => {
-                    console.error("Playback error:", error);
-                    alert("The music is ready! Click the 'Play' button on the audio bar below to start 🎵");
-                });
+                player.load();
+                player.play();
+
+                // Trigger Visuals
+                if (mood === "rain") {
+                    document.body.style.background = "linear-gradient(#4b6cb7, #182848)";
+                    for(let i=0; i<100; i++) {
+                        let drop = document.createElement("div");
+                        drop.className = "drop";
+                        drop.style.left = Math.random() * 100 + "vw";
+                        drop.style.animationDuration = Math.random() * 0.5 + 0.5 + "s";
+                        container.appendChild(drop);
+                    }
+                } 
+                else if (mood === "sunset") {
+                    document.body.style.background = "linear-gradient(#451e3e, #fe5151)";
+                    sun.style.bottom = "20%";
+                }
+                else if (mood === "love") {
+                    document.body.style.background = "linear-gradient(#ff9a9e, #fecfef)";
+                    setInterval(() => {
+                        let heart = document.createElement("div");
+                        heart.className = "heart";
+                        heart.innerHTML = Math.random() > 0.5 ? "❤️" : "🌸";
+                        heart.style.left = Math.random() * 100 + "vw";
+                        heart.style.animationDuration = Math.random() * 2 + 3 + "s";
+                        container.appendChild(heart);
+                        setTimeout(() => heart.remove(), 4000);
+                    }, 300);
+                }
             } else {
-                alert("No song for that mood yet 🌻. Try typing: love, sunset, or rain.");
+                alert("No song for that mood yet 🌻. Try: love, sunset, or rain.");
             }
         }
     </script>
-
 </body>
 </html>
